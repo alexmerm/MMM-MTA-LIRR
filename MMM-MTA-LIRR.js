@@ -73,6 +73,7 @@ Module.register("MMM-MTA-LIRR",{
     this.updateDom();
   },
 
+//Are they ever diff than this status alert? Also Can I switch to warning from schedule
   updateStatus(data) {
     // LIRR has different naming conventions for branches in the
     // API's AllStations endpoint vs. their Status endpoint.
@@ -94,7 +95,7 @@ Module.register("MMM-MTA-LIRR",{
       return;
     }
     const departures = [];
-    const trains = data.TRAINS.filter((t, i) => t.DIR === 'W').slice(0, this.config.departuresToShow);
+    const trains = data.TRAINS.filter((t, i) => t.DIR === self.config.direction).slice(0, this.config.departuresToShow);
     trains.map(t => {
       const scheduled = moment(t.SCHED);
       const scheduledText = `<span class="title bright">${scheduled.format('h:mm A')}</span>`
@@ -117,7 +118,7 @@ Module.register("MMM-MTA-LIRR",{
 
   fetchStations: function() {
     var self = this;
-    fetch('modules/MMM-MTA-LIRR/station_codes.json')
+    fetch('modules/MMM-MTA-LIRR/station_codes.json') //pulls local file
       .then(res => res.json())
       .then(stations => {
         self.stations = stations;
